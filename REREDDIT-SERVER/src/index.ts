@@ -12,6 +12,7 @@ import redis from 'redis';
 import session from 'express-session';
 import connectRedis from "connect-redis";
 import cors from "cors";
+import { COOCKIE_NAME } from "./constants";
 
 
 const main = async () => {
@@ -31,7 +32,7 @@ const main = async () => {
     )
     app.use(
     session({
-        name: 'qid',
+        name: COOCKIE_NAME,
         store: new RedisStore({ 
             client: redisClient,
             disableTouch: true
