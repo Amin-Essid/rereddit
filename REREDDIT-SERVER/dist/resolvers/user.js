@@ -96,12 +96,16 @@ let UserResolver = class UserResolver {
                 };
             }
             const hashedPassword = yield argon2_1.default.hash(options.password);
-            const user = em.create(User_1.User, {
-                username: options.username,
-                password: hashedPassword
-            });
+            let user;
             try {
-                yield em.persistAndFlush(user);
+                const result = yield em.createQueryBuilder(User_1.User).getKnexQuery().insert({
+                    username: options.username,
+                    password: hashedPassword,
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                })
+                    .returning("*");
+                user = result[0];
             }
             catch (err) {
                 if (err.code === '23505') {
@@ -114,7 +118,8 @@ let UserResolver = class UserResolver {
                 }
             }
             req.session.userId = user.id;
-            return { user: Object.assign(Object.assign({}, user), { createdAt: user.createdAt, updatedAt: user.updatedAt }) };
+            return { user
+            };
         });
     }
     login(options, { em, req }) {
