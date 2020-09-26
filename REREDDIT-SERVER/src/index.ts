@@ -14,6 +14,8 @@ import { COOCKIE_NAME } from "./constants";
 import { createConnection } from "typeorm";
 import { Post } from "./entities/Post";
 import { User } from "./entities/User";
+import path from "path";
+import { Updoot } from "./entities/Updoot";
 
 const main = async () => {
   const conn = await createConnection({
@@ -23,10 +25,13 @@ const main = async () => {
     password: "amin417838",
     logging: true,
     synchronize: true,
-    entities: [User, Post],
+    migrations: [path.join(__dirname, "/migrations/*")],
+    entities: [User, Post, Updoot],
   });
-  // const orm = await MikroORM.init(MickroConfig);
-  // await orm.getMigrator().up();
+
+  await conn.runMigrations();
+
+  // await Post.delete({});
 
   const app = express();
 
