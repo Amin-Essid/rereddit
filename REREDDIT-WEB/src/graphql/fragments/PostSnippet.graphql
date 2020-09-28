@@ -1,7 +1,6 @@
 fragment PostSnippet on Post {
   id
   title
-  text
   createdAt
   creatorId
   textSnippet
